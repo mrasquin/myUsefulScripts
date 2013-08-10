@@ -7,7 +7,7 @@ print_usage()
    echo "Usage: $0 <X> <Y>"
    echo " <X>: geometric model"
    echo " <Y>: attribute file"
-   echo " Note: soft add +simmodsuite-9.0-130715 if not already done to build the face property files"
+   echo " Note: soft add +simmodsuite-9.0-130715 if not already done"
 }  
 
 if [ "$#" -ne "$nargs" ] ; then
@@ -31,6 +31,7 @@ else
 	echo File extension unknown for $modelfile
 	exit 1
 fi
+
 /users/mrasquin/develop/Meshing/BLMesher/bin/x86_64_linux/$executable $modelfile geom_ver63.sms 2 1.0 $attribfile > BLMesher.log 2>&1
 
 

@@ -21,5 +21,5 @@ fi
 fileElm=numElm_$nparts.dat
 fileNod=numNod_$nparts.dat
 
-cat $fileElm | awk '{if($1>max) max=$1 ; sum+=$1} END {print "Number of parts:",NR, "- Max elm:",max, "- Avg elm:",sum/NR, "Elm imb=", max/sum*NR}'
-cat $fileNod | awk '{if($1>max) max=$1 ; sum+=$1} END {print "Number of parts:",NR, "- Max nod:",max, "- Avg nod:",sum/NR, "Nod imb=", max/sum*NR}'
+cat $fileElm | awk '{if($1>max) max=$1 ; sum+=$1} END {print "Number of parts:",NR, " - Tot elm:", sum, "- Max elm:", max, "- Avg elm:", sum/NR, "Elm imb=", max/sum*NR}'
+cat $fileNod | awk '{if($1>max) max=$1 ; sum+=$1} END {print "Number of parts:",NR, " - Tot Nod:", sum, "- Max nod:", max, "- Avg nod:", sum/NR, "Nod imb=", max/sum*NR}'

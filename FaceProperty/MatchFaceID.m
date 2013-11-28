@@ -13,19 +13,22 @@ fid = fopen('./MatchFaceID.dat','w');
 [rowsOld colsOld] = size(FacePropDataOld);
 [rowsNew colsNew] = size(FacePropDataNew);
 
-t=1; p=1; areExtras=0; tol = 5e-5;
+t=1; p=1; areExtras=0; abstol = 1e-8; reltol = 1e-3;
 extraMatches=[]; extraOriginals=[];
 for i=1:rowsNew
     matchFound=0; p=1; faceMatch=[]; faceOriginal=[];
     for j=1:rowsOld
         vertexMatch=0;
-        for x=4:9
-            if abs((FacePropDataOld(j,x) - FacePropDataNew(i,x))/FacePropDataOld(j,x)) < tol
-                    
+        % Area, number of vertices, Min and max for x, y, z
+        for x=2:9
+            if abs((FacePropDataOld(j,x) - FacePropDataNew(i,x))/FacePropDataOld(j,x)) < reltol
+                vertexMatch=vertexMatch+1;
+            elseif abs((FacePropDataOld(j,x) - FacePropDataNew(i,x))) < abstol 
+                % Second chance to find a match, useful when the machine precision has been reached already (for instance 1e-10 vs 1e-11)
                 vertexMatch=vertexMatch+1;
             end
         end
-        if vertexMatch == 6
+        if vertexMatch == 8
             faceMatch(p)=FacePropDataOld(j,1);
             faceOriginal(p)=FacePropDataNew(i,1);
             matchFound=1;

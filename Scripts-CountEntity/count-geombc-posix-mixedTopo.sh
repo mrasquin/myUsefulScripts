@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Give the name of the proc case dir
 dir_proccase=$1
 nargs=1
@@ -10,9 +12,8 @@ exit 1
 }
 
 # check that user entered proper number of args
-if [[ "${#}" -ne "$nargs" ]]
-then
-die "\n Check usage: \n  $0\n  < ##-procs_case >\n"
+if [[ "${#}" -ne "$nargs" ]] ; then
+	die "\n Check usage: \n  $0\n  < ##-procs_case >\n"
 fi
 
 #Get the number of parts from ##-procs_case dir

@@ -22,4 +22,4 @@ fileElm=numElm_$nparts.dat
 fileNod=numNod_$nparts.dat
 
 cat $fileElm | awk '{if(min==""){min=max=$1} ; if(min>$1){min=$1} ; if($1>max){max=$1} ; sum+=$1 } END {print "Number of parts:",NR, " - Tot elm:", sum, "- Min elm:", min, "- Max elm:", max, "- Avg elm:", sum/NR, "Elm imb=", max/sum*NR}'
-cat $fileNod | awk '{if(min==""){min=max=$1} ; if(min>$1){min=$1} ; if($1>max){max=$1} ; sum+=$1 } END {print "Number of parts:",NR, " - Tot nod:", sum, "- Min nod:", min, "- Max nod:", max, "- Avg nod:", sum/NR, "Elm imb=", max/sum*NR}'
+cat $fileNod | awk '{if(min==""){min=max=$1} ; if(min>$1){min=$1} ; if($1>max){max=$1} ; sum+=$1 } END {print "Number of parts:",NR, " - Tot nod:", sum, "- Min nod:", min, "- Max nod:", max, "- Avg nod:", sum/NR, "Nod imb=", max/sum*NR}'

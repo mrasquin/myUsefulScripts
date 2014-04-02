@@ -1,43 +1,34 @@
 #!/bin/bash
 
-outputpart=$1
-operation=$2
+
+inputpart=$1 
+outputpart=$2
 timestep=$3
 writesms=$4
+operation=$5
 
 print_usage()                                                                                  
 {
    echo "Usage: $0"                                                                 
+   echo "<inputpart>"
    echo "<outputpart>"
-   echo "<operations> (UR, Part, Tet, URPart)"
    echo "<timestep>"
    echo "<writesms> (0 or 1)"
+   echo "<operations> (UR, Part, Tet, URPart)"
 }  
 
-
 # Check the input
-if [ "x$outputpart" == "x" ]; then
-	echo 'Specify the number of output parts'
+nargs=5
+if [$# -ne $nargs ]; then
+	echo "Number of arguments not equal to $nargs"
 	print_usage
 	exit 1
-fi
-
-if [ "x$operation" == "x" ]; then
-        echo 'Specify the Operation'
-        print_usage
-        exit 1
 fi
 
 if [ "x$operation" != "xUR" ] && [ "x$operation" != "xPart" ] && [ "x$operation" != "xTet" ] && [ "x$operation" != "xURPart" ] ; then
         echo "Operation should be either Part, UR, Tet, or URPart"
         print_usage
         exit 1
-fi
-
-if [ "x$writesms" == "x" ] ; then
-	echo "writesms must be provided"
-	print_usage
-	exit 1
 fi
 
 ### touch the output files
@@ -47,6 +38,37 @@ maxsubdir=2048
 if [ "$outputpart" -gt "$maxsubdir" ] ; then
 	partpersubdir=$(($outputpart / $maxsubdir))
 fi
+
+# touch the restart files - always
+dir=$outputpart-procs_case
+mkdir $dir
+
+if [ "$outputpart" -gt "$maxsubdir" ] ; then
+	for (( i=0; i<$(($maxsubdir)); i++))  ; do
+		mkdir $dir/$i
+	done
+fi
+
+for (( i=1; i<=$(($outputpart)); i++))  ; do
+	if [ "$(($i % 16384))" -eq "0" -a "$i" -gt "0" ] ; then
+		echo "Touching $i th phasta files"
+	i
+
+	if [ "$outputpart" -ge "$maxsubdir" ] ; then
+                subdir=$(( ( $i-1 - ($i-1)%$partpersubdir)/$partpersubdir ))
+	else
+		# if the # of parts <= maxsubdir, then parpersubdir is left empty
+		subdir=
+	fi
+
+	#echo "$i - $subdir"
+	touch $dir/$subdir/restart.$timestep.$i &
+	touch $dir/$subdir/geombc.dat.$i
+done
+echo "The restart.$timestep.# and geombc.dat.# files have been touched"
+
+
+
 
 # sms files
 if [ "x$writesms" == "x1" ] ; then
@@ -86,34 +108,5 @@ if [ "x$writesms" == "x1" ] ; then
 
 	echo "The geom#.sms files have been touched"
 fi
-
-
-# touch the restart files - always
-dir=$outputpart-procs_case
-mkdir $dir
-
-if [ "$outputpart" -gt "$maxsubdir" ] ; then
-	for (( i=0; i<$(($maxsubdir)); i++))  ; do
-		mkdir $dir/$i
-	done
-fi
-
-for (( i=1; i<=$(($outputpart)); i++))  ; do
-	if [ "$(($i % 16384))" -eq "0" -a "$i" -gt "0" ] ; then
-		echo "Touching $i th phasta files"
-	fi
-
-	if [ "$outputpart" -ge "$maxsubdir" ] ; then
-                subdir=$(( ( $i-1 - ($i-1)%$partpersubdir)/$partpersubdir ))
-	else
-		# if the # of parts <= maxsubdir, then parpersubdir is left empty
-		subdir=
-	fi
-
-	#echo "$i - $subdir"
-	touch $dir/$subdir/restart.$timestep.$i &
-	touch $dir/$subdir/geombc.dat.$i
-done
-echo "The restart.$timestep.# and geombc.dat.# files have been touched"
 
 

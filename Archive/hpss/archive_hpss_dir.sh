@@ -6,8 +6,8 @@
 # Favor large files in the directories if possible to hpss, like tarball or heavy phasta files
 #
 # Usage: 
-# 	for one single directory			./archive_hpss_file.sh dir
-#	for a set of directories (note the quotes!):	./archive_hpss_file.sh "dir*"
+# 	for one single directory			./archive_hpps_dir.sh dir
+#	for a set of directories (note the quotes!):	./archive_hpss_dir.sh "dir*"
 #
 # Note that a directory tree similar to what pwd returns in the current dir 
 # will be created on hpss. Concretely, the path beyond your username will be 
@@ -16,7 +16,7 @@
 # The hsi log are saved in a file named hsi.log_date
 #
 # The directories archived to hpss are then moved to a TRASH directory. 
-# For safety, always check the log file and the archived filee on hpss before deleting 
+# For safety, always check the log file and the archived dir on hpss before deleting 
 #
 
 # Function die called when there is a problem 
